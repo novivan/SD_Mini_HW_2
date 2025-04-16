@@ -6,6 +6,11 @@
 ```
 cd sd_mini_2
 ```
+Новое (со Spring'ом):
+```
+mvn spring-boot:run
+```
+(Старое без Spring)
 Компиляция:
 ```
 mvn compile

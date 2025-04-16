@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <meta charset="UTF-8">
+    <title>Мое первое веб-приложение на Java</title>
+    <style> 
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            text-align: center;
+        }
+        h1 {
+            color: #336699;
+        }
+    </style>
+</head>
+<body> 
+    <h1>Добро пожаловать!</h1>
+    <p th:text="${message}">Сообщение будет заменено</p>
+</body>
+</html>
