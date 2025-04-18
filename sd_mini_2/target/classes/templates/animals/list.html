@@ -25,6 +25,8 @@
                         <th>Пол</th>
                         <th>Любимая еда</th>
                         <th>Статус</th>
+                        <th>Вольер</th>
+                        <th>Ближайшее кормление</th>
                         <th>Действия</th>
                     </tr>
                 </thead>
@@ -35,7 +37,25 @@
                         <td th:text="${animal.birthDate}">Дата рождения</td>
                         <td th:text="${animal.gender.displayName}">Пол</td>
                         <td th:text="${animal.favoriteFood.displayName}">Любимая еда</td>
-                        <td th:text="${animal.healthStatus.displayName}">Статус</td>
+                        <td>
+                            <span th:if="${animal.healthStatus.name() == 'HEALTHY'}" class="badge bg-success" th:text="${animal.healthStatus.displayName}">Здоров</span>
+                            <span th:if="${animal.healthStatus.name() == 'SICK'}" class="badge bg-danger" th:text="${animal.healthStatus.displayName}">Болен</span>
+                            <span th:if="${animal.healthStatus.name() == 'UNDER_OBSERVATION'}" class="badge bg-warning" th:text="${animal.healthStatus.displayName}">Под наблюдением</span>
+                        </td>
+                        <td>
+                            <a th:if="${animal.currentEnclosure != null}" 
+                               th:href="@{/web/enclosures/{id}(id=${animal.currentEnclosure.id})}" 
+                               th:text="${animal.currentEnclosure.name}">Название вольера</a>
+                            <span th:if="${animal.currentEnclosure == null}" class="text-muted">Не размещено</span>
+                        </td>
+                        <td>
+                            <span th:if="${nextFeedings != null && nextFeedings.containsKey(animal.id)}" 
+                                  th:text="${#temporals.format(nextFeedings.get(animal.id).feedingTime, 'dd.MM.yyyy HH:mm')}">
+                                  Время кормления
+                            </span>
+                            <span th:unless="${nextFeedings != null && nextFeedings.containsKey(animal.id)}" 
+                                  class="text-muted">Не назначено</span>
+                        </td>
                         <td>
                             <a th:href="@{/web/animals/{id}(id=${animal.id})}" class="btn btn-sm btn-info">Просмотр</a>
                             <a th:href="@{/web/animals/{id}/delete(id=${animal.id})}" class="btn btn-sm btn-danger"
@@ -43,7 +63,7 @@
                         </td>
                     </tr>
                     <tr th:if="${animals.empty}">
-                        <td colspan="7" class="text-center">Нет животных</td>
+                        <td colspan="9" class="text-center">Нет данных о животных</td>
                     </tr>
                 </tbody>
             </table>

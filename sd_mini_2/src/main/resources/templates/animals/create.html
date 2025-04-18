@@ -10,6 +10,10 @@
             <h1 class="h2">Добавить животное</h1>
         </div>
 
+        <div th:if="${param.error}" class="alert alert-danger">
+            Произошла ошибка при создании животного. Проверьте все поля и попробуйте снова.
+        </div>
+
         <form action="/web/animals" method="post">
             <div class="mb-3">
                 <label for="name" class="form-label">Имя</label>
@@ -18,10 +22,8 @@
             <div class="mb-3">
                 <label for="species" class="form-label">Вид</label>
                 <select class="form-select" id="species" name="species" required>
-                    <option value="">Выберите вид</option>
-                    <option th:each="speciesOption : ${species}"
-                            th:value="${speciesOption}"
-                            th:text="${speciesOption.displayName}"></option>
+                    <option value="">Выберите вид животного</option>
+                    <option th:each="speciesOption : ${species}" th:value="${speciesOption}" th:text="${speciesOption.displayName}">Вид животного</option>
                 </select>
             </div>
             <div class="mb-3">
@@ -31,19 +33,15 @@
             <div class="mb-3">
                 <label for="gender" class="form-label">Пол</label>
                 <select class="form-select" id="gender" name="gender" required>
-                    <option value="">Выберите пол</option>
-                    <option th:each="genderOption : ${genders}"
-                            th:value="${genderOption}"
-                            th:text="${genderOption.displayName}"></option>
+                    <option value="">Выберите пол животного</option>
+                    <option th:each="genderOption : ${genders}" th:value="${genderOption}" th:text="${genderOption.displayName}">Пол животного</option>
                 </select>
             </div>
             <div class="mb-3">
                 <label for="favoriteFood" class="form-label">Любимая еда</label>
                 <select class="form-select" id="favoriteFood" name="favoriteFood" required>
-                    <option value="">Выберите тип пищи</option>
-                    <option th:each="foodOption : ${foodTypes}"
-                            th:value="${foodOption}"
-                            th:text="${foodOption.displayName}"></option>
+                    <option value="">Выберите любимую еду</option>
+                    <option th:each="foodType : ${foodTypes}" th:value="${foodType}" th:text="${foodType.displayName}">Тип пищи</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Сохранить</button>
