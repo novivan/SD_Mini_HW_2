@@ -7,6 +7,7 @@
 ```
 cd sd_mini_2
 ```
+(Устанавливаем Spring, если его нет)
 Компиляция и запуск проекта с Spring:
 ```
 mvn spring-boot:run
