@@ -1,10 +1,10 @@
 package sd.mini2.Domain.events;
 
+import java.time.LocalDateTime;
+
 import sd.mini2.Domain.model.Animal;
 import sd.mini2.Domain.model.FeedingSchedule;
 import sd.mini2.Domain.valueobjects.FoodType;
-
-import java.time.LocalDateTime;
 
 public class FeedingTimeEvent {
     private final Animal animal;
@@ -27,7 +27,7 @@ public class FeedingTimeEvent {
         return foodType;
     }
 
-    public LocalDateTime getSchedulerdTime() {
+    public LocalDateTime getScheduledTime() {
         return scheduledTime;
     }
 

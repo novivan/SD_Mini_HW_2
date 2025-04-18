@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <title>Просмотр животного</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2" th:text="${animal.name}">Имя животного</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <a href="/web/animals" class="btn btn-sm btn-outline-secondary">Вернуться к списку</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Информация о животном
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Имя:</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext" th:text="${animal.name}">Имя животного</p>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Вид:</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext" th:text="${animal.species.displayName}">Вид животного</p>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Дата рождения:</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext" th:text="${animal.birthDate}">Дата рождения</p>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Пол:</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext" th:text="${animal.gender.displayName}">Пол животного</p>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Любимая еда:</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext" th:text="${animal.favoriteFood.displayName}">Любимая еда</p>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Статус здоровья:</label>
+                            <div class="col-sm-8">
+                                <span th:if="${animal.healthStatus.name() == 'HEALTHY'}" class="badge bg-success" th:text="${animal.healthStatus.displayName}">Здоров</span>
+                                <span th:if="${animal.healthStatus.name() == 'SICK'}" class="badge bg-danger" th:text="${animal.healthStatus.displayName}">Болен</span>
+                                <span th:if="${animal.healthStatus.name() == 'UNDER_OBSERVATION'}" class="badge bg-warning" th:text="${animal.healthStatus.displayName}">Под наблюдением</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">Текущий вольер</div>
+                    <div class="card-body">
+                        <div th:if="${animal.currentEnclosure != null}">
+                            <p>
+                                <strong>Название:</strong> <span th:text="${animal.currentEnclosure.name}">Название вольера</span><br>
+                                <strong>Тип:</strong> <span th:text="${animal.currentEnclosure.type.displayName}">Тип вольера</span><br>
+                                <strong>Заполненность:</strong> <span th:text="${animal.currentEnclosure.currentOccupancy + '/' + animal.currentEnclosure.maxCapacity}">Заполненность</span>
+                            </p>
+                            <div class="d-flex">
+                                <a th:href="@{/web/enclosures/{id}(id=${animal.currentEnclosure.id})}" class="btn btn-primary me-2">Просмотреть вольер</a>
+                                
+                                <button type="button" class="btn btn-warning" data-bs-toggle="collapse" data-bs-target="#collapseTransfer" aria-expanded="false" aria-controls="collapseTransfer">
+                                    Переместить в другой вольер
+                                </button>
+                            </div>
+                            
+                            <!-- Раскрывающаяся панель для перемещения животного -->
+                            <div class="collapse mt-3" id="collapseTransfer">
+                                <div class="card card-body bg-light">
+                                    <form th:if="${!enclosures.empty}" action="#" th:action="@{/web/animals/{id}/move(id=${animal.id})}" method="post">
+                                        <div class="mb-3">
+                                            <label for="enclosureId" class="form-label">Выберите вольер для перемещения:</label>
+                                            <select class="form-select" id="enclosureId" name="enclosureId" required>
+                                                <option value="">Выберите вольер</option>
+                                                <option th:each="enclosure : ${enclosures}" 
+                                                        th:value="${enclosure.id}" 
+                                                        th:text="${enclosure.name + ' (' + enclosure.type.displayName + ')'}">
+                                                            Название вольера
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Переместить</button>
+                                    </form>
+                                    
+                                    <div th:if="${enclosures.empty}" class="alert alert-warning">
+                                        Нет доступных вольеров для перемещения этого животного.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${animal.currentEnclosure == null}">
+                            <p class="alert alert-warning">Животное не размещено в вольере.</p>
+                            
+                            <form th:if="${!enclosures.empty}" action="#" th:action="@{/web/animals/{id}/move(id=${animal.id})}" method="post" class="mt-3">
+                                <div class="mb-3">
+                                    <label for="enclosureId" class="form-label">Переместить в вольер:</label>
+                                    <select class="form-select" id="enclosureId" name="enclosureId" required>
+                                        <option value="">Выберите вольер</option>
+                                        <option th:each="enclosure : ${enclosures}" 
+                                                th:value="${enclosure.id}" 
+                                                th:text="${enclosure.name + ' (' + enclosure.type.displayName + ')'}">
+                                                    Название вольера
+                                        </option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Переместить</button>
+                            </form>
+                            
+                            <div th:if="${enclosures.empty}" class="alert alert-danger">
+                                Нет доступных вольеров для размещения животного.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

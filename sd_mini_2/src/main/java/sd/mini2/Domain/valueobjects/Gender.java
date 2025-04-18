@@ -1,8 +1,8 @@
 package sd.mini2.Domain.valueobjects;
 
 public enum Gender {
-    MALE(""),
-    FEMALE("");
+    MALE("Мужской"),
+    FEMALE("Женский");
 
     private final String displayName;
 

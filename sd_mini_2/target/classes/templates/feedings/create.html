@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <title>Добавить кормление</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Добавить кормление</h1>
+        </div>
+
+        <form action="/web/feedings" method="post">
+            <div class="mb-3">
+                <label for="animalId" class="form-label">Животное</label>
+                <select class="form-select" id="animalId" name="animalId" required>
+                    <option value="">Выберите животное</option>
+                    <option th:each="animal : ${animals}" 
+                            th:value="${animal.id}" 
+                            th:text="${animal.name + ' (' + animal.species.displayName + ')'}">
+                            Имя животного (вид)
+                    </option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="feedingTime" class="form-label">Время кормления</label>
+                <input type="datetime-local" class="form-control" id="feedingTime" name="feedingTime" required>
+            </div>
+            <div class="mb-3">
+                <label for="foodType" class="form-label">Тип пищи</label>
+                <select class="form-select" id="foodType" name="foodType" required>
+                    <option value="">Выберите тип пищи</option>
+                    <option th:each="foodType : ${foodTypes}" 
+                            th:value="${foodType}" 
+                            th:text="${foodType.displayName}">
+                            Тип пищи
+                    </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a href="/web/feedings" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+</body>
+</html>

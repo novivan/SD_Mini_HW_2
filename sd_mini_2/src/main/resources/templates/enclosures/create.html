@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <title>Добавить вольер</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Добавить вольер</h1>
+        </div>
+
+        <form action="/web/enclosures" method="post">
+            <div class="mb-3">
+                <label for="name" class="form-label">Название</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="type" class="form-label">Тип вольера</label>
+                <select class="form-select" id="type" name="type" required>
+                    <option value="">Выберите тип</option>
+                    <option th:each="enclosureType : ${enclosureTypes}"
+                            th:value="${enclosureType}"
+                            th:text="${enclosureType.displayName}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="maxCapacity" class="form-label">Максимальная вместимость</label>
+                <input type="number" class="form-control" id="maxCapacity" name="maxCapacity" min="1" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a href="/web/enclosures" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+</body>
+</html>

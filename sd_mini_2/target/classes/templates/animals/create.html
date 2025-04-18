@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <title>Добавить животное</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Добавить животное</h1>
+        </div>
+
+        <form action="/web/animals" method="post">
+            <div class="mb-3">
+                <label for="name" class="form-label">Имя</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="species" class="form-label">Вид</label>
+                <select class="form-select" id="species" name="species" required>
+                    <option value="">Выберите вид</option>
+                    <option th:each="speciesOption : ${species}"
+                            th:value="${speciesOption}"
+                            th:text="${speciesOption.displayName}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="birthDate" class="form-label">Дата рождения</label>
+                <input type="date" class="form-control" id="birthDate" name="birthDate" required>
+            </div>
+            <div class="mb-3">
+                <label for="gender" class="form-label">Пол</label>
+                <select class="form-select" id="gender" name="gender" required>
+                    <option value="">Выберите пол</option>
+                    <option th:each="genderOption : ${genders}"
+                            th:value="${genderOption}"
+                            th:text="${genderOption.displayName}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="favoriteFood" class="form-label">Любимая еда</label>
+                <select class="form-select" id="favoriteFood" name="favoriteFood" required>
+                    <option value="">Выберите тип пищи</option>
+                    <option th:each="foodOption : ${foodTypes}"
+                            th:value="${foodOption}"
+                            th:text="${foodOption.displayName}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a href="/web/animals" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+</body>
+</html>

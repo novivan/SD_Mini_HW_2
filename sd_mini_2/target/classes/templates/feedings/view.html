@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <title>Просмотр кормления</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Кормление</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <a href="/web/feedings" class="btn btn-sm btn-outline-secondary">Вернуться к списку</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Информация о кормлении
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Животное:</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext">
+                                    <a th:href="@{/web/animals/{id}(id=${feeding.animal.id})}" th:text="${feeding.animal.name}">Имя животного</a>
+                                    (<span th:text="${feeding.animal.species.displayName}">Вид животного</span>)
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Время кормления:</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext" th:text="${#temporals.format(feeding.feedingTime, 'dd.MM.yyyy HH:mm')}">Время кормления</p>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Тип пищи:</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext" th:text="${feeding.foodType.displayName}">Тип пищи</p>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Статус:</label>
+                            <div class="col-sm-8">
+                                <span th:if="${feeding.completed}" class="badge bg-success">Выполнено</span>
+                                <span th:unless="${feeding.completed}" class="badge bg-warning">Ожидает</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3" th:if="${!feeding.completed}">
+                            <form th:action="@{/web/feedings/{id}/complete(id=${feeding.id})}" method="post">
+                                <button type="submit" class="btn btn-success">Отметить как выполненное</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">Информация о животном</div>
+                    <div class="card-body">
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Имя:</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext" th:text="${feeding.animal.name}">Имя животного</p>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Вид:</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext" th:text="${feeding.animal.species.displayName}">Вид животного</p>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Статус здоровья:</label>
+                            <div class="col-sm-8">
+                                <span th:if="${feeding.animal.healthStatus.name() == 'HEALTHY'}" class="badge bg-success" th:text="${feeding.animal.healthStatus.displayName}">Здоров</span>
+                                <span th:if="${feeding.animal.healthStatus.name() == 'SICK'}" class="badge bg-danger" th:text="${feeding.animal.healthStatus.displayName}">Болен</span>
+                                <span th:if="${feeding.animal.healthStatus.name() == 'UNDER_OBSERVATION'}" class="badge bg-warning" th:text="${feeding.animal.healthStatus.displayName}">Под наблюдением</span>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Любимая еда:</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext" th:text="${feeding.animal.favoriteFood.displayName}">Любимая еда</p>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Текущий вольер:</label>
+                            <div class="col-sm-8">
+                                <p th:if="${feeding.animal.currentEnclosure != null}" class="form-control-plaintext">
+                                    <a th:href="@{/web/enclosures/{id}(id=${feeding.animal.currentEnclosure.id})}" 
+                                       th:text="${feeding.animal.currentEnclosure.name}">Название вольера</a>
+                                </p>
+                                <p th:if="${feeding.animal.currentEnclosure == null}" class="form-control-plaintext text-muted">
+                                    Не помещено в вольер
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <a th:href="@{/web/animals/{id}(id=${feeding.animal.id})}" class="btn btn-primary">Подробнее о животном</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

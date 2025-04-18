@@ -1,12 +1,13 @@
 package sd.mini2.Domain.model;
 
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.UUID;
+
 import sd.mini2.Domain.valueobjects.AnimalSpecies;
 import sd.mini2.Domain.valueobjects.FoodType;
 import sd.mini2.Domain.valueobjects.Gender;
 import sd.mini2.Domain.valueobjects.HealthStatus;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 public class Animal {
     private final UUID id;
@@ -18,7 +19,13 @@ public class Animal {
     private HealthStatus healthStatus;
     private Enclosure currentEnclosure;
 
-    public Animal(AnimalSpecies species, String name, LocalDate birthDate, Gender gender, FoodType favouriteFood) {
+    public Animal(AnimalSpecies species, String name, LocalDate birthDate, Gender gender, FoodType favoriteFood) {
+        if (species == null) throw new IllegalArgumentException("Вид животного не может быть NULL");
+        if (name == null || name.trim().isEmpty()) throw new IllegalArgumentException("Имя животного не может быть пустым");
+        if (birthDate == null) throw new IllegalArgumentException("Дата рождения не может быть NULL");
+        if (gender == null) throw new IllegalArgumentException("Пол животного не может быть NULL");
+        if (favoriteFood == null) throw new IllegalArgumentException("Любимая пища не может быть NULL");
+
         this.id = UUID.randomUUID();
         this.species = species;
         this.name = name;
@@ -111,7 +118,20 @@ public class Animal {
                 ", gender=" + gender.getDisplayName() +
                 ", favoriteFood=" + favoriteFood.getDisplayName() +
                 ", healthStatus=" + healthStatus.getDisplayName() +
+                ", inEnclosure=" + (currentEnclosure != null ? currentEnclosure.getName() : "none") +
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Animal animal = (Animal) o;
+        return id.equals(animal.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
